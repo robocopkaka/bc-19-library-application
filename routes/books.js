@@ -253,18 +253,18 @@ router.delete('/:id/edit', function (req, res){
 /**
 @
 */
-router.post('/books/:id/borrow',  function(req, res){
-    mongoose.model('book').findById(req.id, function (err, book) {
-        if (err) {
-            return console.error(err);
-        } else {
-           if(book.isAvailable === true && book.quantity) {
-              book.quantity -= 1;
-              // code to update borrowed_books table with book's and current user's id
-              // update after creating
-              // mongoose.model('borrowed_books').create(, function(req,res){})
-           }// end of inner if
-        }
-})
+// router.post('/books/:id/borrow',  function(req, res){
+//     mongoose.model('book').findById(req.id, function (err, book) {
+//         if (err) {
+//             return console.error(err);
+//         } else {
+//            if(book.isAvailable === true && book.quantity) {
+//               book.quantity -= 1;
+//               // code to update borrowed_books table with book's and current user's id
+//               // update after creating
+//               // mongoose.model('borrowed_books').create(, function(req,res){})
+//            }// end of inner if
+//         }
+// })
 
 module.exports = router;

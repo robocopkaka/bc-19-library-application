@@ -244,5 +244,6 @@ router.post('/borrowed_books/:id/borrow',  function(req, res){
            }// end of inner if
         }
 })
+  })
 
 module.exports = router;
