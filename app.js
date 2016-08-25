@@ -6,10 +6,15 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var db = require('./models/db.js');
 var book = require('./models/books.js');
+var user = require('./models/users.js');
+var category = require('./models/categories.js');
+var borrowed_book = require('./models/borrowed_books.js')
 
 var routes = require('./routes/index');
-var users = require('./routes/users');
+var users1 = require('./routes/users');
 var books = require('./routes/books');
+var categories = require('./routes/categories');
+var borrowed_books = require('/.routes/borrowed_books')
 var app = express();
 
 // view engine setup
@@ -25,8 +30,9 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
-app.use('/users', users);
+app.use('/users', users1);
 app.use('/books', books);
+app.use('/categories', categories);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
