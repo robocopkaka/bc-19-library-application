@@ -7,22 +7,18 @@
 <body>
   <ul>
     <% books.forEach(function(book) { %>
-        <li><%= book.name %> - <%= book.author %></li>
+        <li><%= book.name %>, <%= book.author %>
+            <a href="/books/<%= book._id %>">Show</a> | 
+            <a href="/books/<%= book._id %>/edit">Edit</a> |
+            <form action="/books/<%= book._id%>" method="post" enctype='application/x-www-form-urlencoded'>
+              <input type="hidden" name="_method" value="DELETE">
+              <button type="submit">Delete</button>
+            </form>
+        </li>
     <% }); %>
   </ul>
 
-  <form action="/books" method="post">
-    <input type="text" name="name"/>
-    <input type="text" name="isbn"/>
-    <input type="text" name="author"/>
-    <input type="text" name="description">
-    <input type="text" name="quantity"/>
-    <input type="text" name="category"/>
-    <input type="text" name="isAvailable">
-    <button type="submit">Submit</button>
-  </form>
-
-  <form action="/books/#{books._id}" method="post" enctype='application/x-www-form-urlencoded'>
+  <form action="/books/#{book._id}" method="post" enctype='application/x-www-form-urlencoded'>
       <input type="hidden" name="_method" value="DELETE">
       <button type="submit">Delete</button>
   </form>
