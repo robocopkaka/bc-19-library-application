@@ -1,0 +1,20 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Stuff</title>
+</head>
+<body>
+  <ul>
+    <% categories.forEach(function(category) { %>
+        <li><%= category.name %></li>
+    <% }); %>
+  </ul>
+
+  <form action="/categories" method="post">
+    <input type="text" name="name"/>
+    <button type="submit">Submit</button>
+  </form>
+
+</body>
+</html>

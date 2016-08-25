@@ -14,23 +14,23 @@ router.use(methodOverride(function(req, res){
       }
 }))
 router.route('/')
-    //GET all books
+    //GET all categorys
     .get(function(req, res, next) {
-        //retrieve all books from Monogo
-        mongoose.model('book').find({}, function (err, books) {
+        //retrieve all categorys from Monogo
+        mongoose.model('category').find({}, function (err, categories) {
               if (err) {
                   return console.error(err);
               } else {
                   //respond to both HTML and JSON. JSON responses require 'Accept: application/json;' in the Request Header
                   res.format({
-                      //HTML response will render the index.jade file in the views/books folder. We are also setting "books" to be an accessible variable in our jade view
+                      //HTML response will render the index.jade file in the views/categorys folder. We are also setting "categorys" to be an accessible variable in our jade view
                     html: function(){
-                        res.render('books/index', {
-                              title: 'All my books',
-                              "books" : books
+                        res.render('categories/index', {
+                              title: 'All my categorys',
+                              "categories" : categories
                           });
                     },
-                    //JSON response will show all books in JSON format
+                    //JSON response will show all categorys in JSON format
                     json: function(){
                         res.json(infophotos);
                     }
@@ -38,44 +38,29 @@ router.route('/')
               }     
         });
     })
-    //POST a new book
+    //POST a new category
     .post(function(req, res) {
         // Get values from POST request. These can be done through forms or REST calls. These rely on the "name" attributes for forms
         var name1 = req.body.name;
-        var isbn1 = req.body.isbn;
-        var author1 = req.body.author;
-        var description1 = req.body.description;        
-        var quantity1 = req.body.quantity;
-        var surchargeFee1 = req.body.surchargeFee;
-        var category1 = req.body.category
-        var isAvailable1 = req.body.isAvailable;
         //call the create function for our database
-        mongoose.model('book').create({
-            name : name1,
-            isbn : isbn1,
-            author : author1,
-            description: description1,
-            quantity: quantity1,
-            surchargeFee: surchargeFee1,
-            category:category1,
-            isAvailable : isAvailable1
-        }, function (err, book) {
+        mongoose.model('category').create({
+            name : name1        }, function (err, category) {
               if (err) {
                   res.send("There was a problem adding the information to the database.");
               } else {
-                  //book has been created
-                  console.log('POST creating new book: ' + book);
+                  //category has been created
+                  console.log('POST creating new category: ' + category);
                   res.format({
                       //HTML response will set the location and redirect back to the home page. You could also create a 'success' page if that's your thing
                     html: function(){
-                        // If it worked, set the header so the address bar doesn't still say /adduser
-                        res.location("books");
+                        // If it worked, set the header so the address bar doesn't still say /addcategory
+                        res.location("categories");
                         // And forward to success page
-                        res.redirect("/books");
+                        res.redirect("/categories");
                     },
-                    //JSON response will show the newly created book
+                    //JSON response will show the newly created category
                     json: function(){
-                        res.json(book);
+                        res.json(category);
                     }
                 });
               }
@@ -83,9 +68,9 @@ router.route('/')
     });
 
 
-    /* GET New book page. */
+    /* GET New category page. */
 router.get('/new', function(req, res) {
-    res.render('books/new', { title: 'Add New book' });
+    res.render('categories/new', { title: 'Add New category' });
 });
 
 
@@ -93,7 +78,7 @@ router.get('/new', function(req, res) {
 router.param('id', function(req, res, next, id) {
     //console.log('validating ' + id + ' exists');
     //find the ID in the Database
-    mongoose.model('book').findById(id, function (err, book) {
+    mongoose.model('category').findById(id, function (err, category) {
         //if it isn't found, we are going to repond with 404
         if (err) {
             console.log(id + ' was not found');
@@ -111,7 +96,7 @@ router.param('id', function(req, res, next, id) {
         //if it is found we continue on
         } else {
             //uncomment this next line if you want to see every JSON document response for every GET/PUT/DELETE call
-            //console.log(book);
+            //console.log(category);
             // once validation is done save the new item in the req
             req.id = id;
             // go to the next thing
@@ -122,83 +107,69 @@ router.param('id', function(req, res, next, id) {
 
 router.route('/:id')
   .get(function(req, res) {
-    mongoose.model('book').findById(req.id, function (err, book) {
+    mongoose.model('category').findById(req.id, function (err, category) {
       if (err) {
         console.log('GET Error: There was a problem retrieving: ' + err);
       } else {
-        console.log('GET Retrieving ID: ' + book._id);
-        var bookdob = book.dob.toISOString();
-        bookdob = bookdob.substring(0, bookdob.indexOf('T'))
+        console.log('GET Retrieving ID: ' + category._id);
+        var categorydob = category.dob.toISOString();
+        categorydob = categorydob.substring(0, categorydob.indexOf('T'))
         res.format({
           html: function(){
-              res.render('books/show', {
-                "bookdob" : bookdob,
-                "book" : book
+              res.render('categorys/show', {
+                "categorydob" : categorydob,
+                "category" : category
               });
           },
           json: function(){
-              res.json(book);
+              res.json(category);
           }
         });
       }
     });
 });
 
-//GET the individual book by Mongo ID
+//GET the individual category by Mongo ID
 router.get('/:id/edit', function(req, res) {
-    //search for the book within Mongo
-    mongoose.model('book').findById(req.id, function (err, book) {
+    //search for the category within Mongo
+    mongoose.model('category').findById(req.id, function (err, category) {
         if (err) {
             console.log('GET Error: There was a problem retrieving: ' + err);
         } else {
-            //Return the book
-            console.log('GET Retrieving ID: ' + book._id);
+            //Return the category
+            console.log('GET Retrieving ID: ' + category._id);
             //format the date properly for the value to show correctly in our edit form
-          var bookdob = book.dob.toISOString();
-          bookdob = bookdob.substring(0, bookdob.indexOf('T'))
+          var categorydob = category.dob.toISOString();
+          categorydob = categorydob.substring(0, categorydob.indexOf('T'))
             res.format({
                 //HTML response will render the 'edit.jade' template
                 html: function(){
-                       res.render('books/edit', {
-                          title: 'book' + book._id,
-                        "bookdob" : bookdob,
-                          "book" : book
+                       res.render('categories/edit', {
+                          title: 'category' + category._id,
+                        "categorydob" : categorydob,
+                          "category" : category
                       });
                  },
                  //JSON response will return the JSON output
                 json: function(){
-                       res.json(book);
+                       res.json(category);
                  }
             });
         }
     });
 });
 
-//PUT to update a book by ID
+//PUT to update a category by ID
 router.put('/:id/edit', function(req, res) {
     // Get our REST or form values. These rely on the "name" attributes
         var name1 = req.body.name;
-        var isbn1 = req.body.isbn;
-        var author1 = req.body.author;
-        var description1 = req.body.description;        
-        var quantity1 = req.body.quantity;
-        var surchargeFee1 = req.body.surchargeFee;
-        var category1 = req.body.category
-        var isAvailable1 = req.body.isAvailable;
 
    //find the document by ID
-        mongoose.model('book').findById(req.id, function (err, book) {
+        mongoose.model('category').findById(req.id, function (err, category) {
             //update it
-            book.update({
-                name : name1,
-            	isbn : isbn1,
-            	author : author1,
-            	description: description1,
-            	quantity: quantity1,
-            	surchargeFee: surchargeFee1,
-            	category:category1,
-            	isAvailable : isAvailable1
-            }, function (err, bookID) {
+            category.update({
+                name : name1
+            }, function (err, categoryID) {
               if (err) {
                   res.send("There was a problem updating the information to the database: " + err);
               } 
@@ -206,11 +177,11 @@ router.put('/:id/edit', function(req, res) {
                       //HTML responds by going back to the page or you can be fancy and create a new view that shows a success page.
                       res.format({
                           html: function(){
-                               res.redirect("/books/" + book._id);
+                               res.redirect("/categories/" + category._id);
                          },
                          //JSON responds showing the updated values
                         json: function(){
-                               res.json(book);
+                               res.json(category);
                          }
                       });
                }
@@ -218,29 +189,29 @@ router.put('/:id/edit', function(req, res) {
         });
 });
 
-//DELETE a book by ID
+//DELETE a category by ID
 router.delete('/:id/edit', function (req, res){
-    //find book by ID
-    mongoose.model('book').findById(req.id, function (err, book) {
+    //find category by ID
+    mongoose.model('category').findById(req.id, function (err, category) {
         if (err) {
             return console.error(err);
         } else {
             //remove it from Mongo
-            book.remove(function (err, book) {
+            category.remove(function (err, category) {
                 if (err) {
                     return console.error(err);
                 } else {
                     //Returning success messages saying it was deleted
-                    console.log('DELETE removing ID: ' + book._id);
+                    console.log('DELETE removing ID: ' + category._id);
                     res.format({
                         //HTML returns us back to the main page, or you can create a success page
                           html: function(){
-                               res.redirect("/books");
+                               res.redirect("/categories");
                          },
                          //JSON returns the item with the message that is has been deleted
                         json: function(){
                                res.json({message : 'deleted',
-                                   item : book
+                                   item : category
                                });
                          }
                       });
