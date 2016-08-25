@@ -1,0 +1,24 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Stuff</title>
+</head>
+<body>
+  <ul>
+    <% users.forEach(function(user) { %>
+        <li><%= user.name %> - <%= user.phone_number %></li>
+    <% }); %>
+  </ul>
+
+  <form action="/users" method="post">
+    <input type="text" name="name"/>
+    <input type="text" name="phone_number"/>
+    <input type="text" name="email_address"/>
+    <input type="text" name="address"/>
+    <input type="text" name="isAdmin">
+    <button type="submit">Submit</button>
+  </form>
+
+</body>
+</html>
