@@ -84,9 +84,12 @@ router.route('/')
 
 
     /* GET New book page. */
-router.get('/new', function(req, res) {
+    // another issue location
+router.get('/new', isAuthenticated, function(req, res) {
+  console.log(req)
     res.render('books/new', { title: 'Add New book' });
 });
+
 
 
 // route middleware to validate :id
@@ -251,26 +254,23 @@ router.delete('/:id/edit', function (req, res){
 });
 
 /**
-@
+* One of the places I have issues in
 */
-router.post('/books/:id/borrow', isLoggedIn,  function(req, res){
+router.put('/books/:id/borrow',  function(req, res){
     var user_id = req.book._id;
     var book_id = req.book._id;
+    var reduce_by_one  = 1;
     mongoose.model('book').findById(req.id, function (err, book) {
+      var book1 = {$inc:{quantity:1}}
+      book.update({
+        quantity: book1
+      })
         if (err) {
             return console.error(err);
         } else {
-           if(book.isAvailable === true && book.quantity) {
-              book.quantity -= 1;
-              // code to update borrowed_books table with book's and current user's id
-              // update after creating
-              // mongoose.model('borrowed_books').create(function(req,res){
-              //   user_id: user_id
-              //   book_id: book._id
-              // });
               res.format({
                 html: function(){
-                res.render('/', {
+                res.render('/book/:id', {
                   // "bookdob" : bookdob,
                   "book" : book
                 });
@@ -280,18 +280,17 @@ router.post('/books/:id/borrow', isLoggedIn,  function(req, res){
                 }
               });
            }// end of inner if
-        }
+        
 })
-  });
+});
 
-function isLoggedIn(req, res, next) {
-
-    // if user is authenticated in the session, carry on 
-    if (req.isAuthenticated())
-        return next();
-
-    // if they aren't redirect them to the home page
-    res.redirect('/');
+// Another place I have issues in
+var isAuthenticated = function (req, res, next) {
+  if (req.isAuthenticated())
+    return next();
+  res.redirect('/');
 }
+
+
 
 module.exports = router;

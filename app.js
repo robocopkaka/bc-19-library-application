@@ -40,7 +40,6 @@ app.use('/', routes);
 app.use('/users', users1);
 app.use('/books', books);
 app.use('/categories', categories);
-
 app.use(session({ secret: 'ilovescotchscotchyscotchscotch' })); // session secret
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
