@@ -9,6 +9,9 @@
   <p>Author:<%= book.author %></p>
   <p>ISBN: <%=book.isbn %></p>
   <p>Quantity: <%= book.quantity %></p>
-  <p><a href="">Borrow a book</a></p> 
+  <form action="/books/<%= book._id%>/borrow" method="post" enctype='application/x-www-form-urlencoded'>
+      <input type="hidden" name="_method" value="POST">
+      <button type="submit">Borrow a book</button>
+  </form>
 </body>
 </html>
