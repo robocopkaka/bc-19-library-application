@@ -63,6 +63,25 @@ module.exports = function(app, passport) {
         req.logout();
         res.redirect('/');
     });
+
+    // =====================================
+    // FACEBOOK ROUTES =====================
+    // =====================================
+    // route for facebook authentication and login
+    app.get('/auth/facebook', passport.authenticate('facebook', { scope : 'email' }));
+
+     app.get('/auth/facebook/callback',
+        passport.authenticate('facebook', {
+            successRedirect : '/profile',
+            failureRedirect : '/'
+        }));
+     app.get('/connect/facebook', passport.authorize('facebook', { scope : ['email'] }));
+
+    // route for logging out
+    app.get('/logout', function(req, res) {
+        req.logout();
+        res.redirect('/');
+    });
 };
 
 // route middleware to make sure a user is logged in

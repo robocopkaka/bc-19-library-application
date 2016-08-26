@@ -20,6 +20,10 @@ var categories = require('./routes/categories');
 var borrowed_books = require('./routes/borrowed_books.js')
 var app = express();
 
+//Load dotenv
+var dotenv = require('dotenv');
+dotenv.load();
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
