@@ -253,7 +253,9 @@ router.delete('/:id/edit', function (req, res){
 /**
 @
 */
-router.post('/books/:id/borrow',  function(req, res){
+router.post('/books/:id/borrow', isLoggedIn,  function(req, res){
+    var user_id = req.book._id;
+    var book_id = req.book._id;
     mongoose.model('book').findById(req.id, function (err, book) {
         if (err) {
             return console.error(err);
@@ -262,9 +264,34 @@ router.post('/books/:id/borrow',  function(req, res){
               book.quantity -= 1;
               // code to update borrowed_books table with book's and current user's id
               // update after creating
-              // mongoose.model('borrowed_books').create(, function(req,res){})
+              // mongoose.model('borrowed_books').create(function(req,res){
+              //   user_id: user_id
+              //   book_id: book._id
+              // });
+              res.format({
+                html: function(){
+                res.render('/', {
+                  // "bookdob" : bookdob,
+                  "book" : book
+                });
+              },
+                json: function(){
+                  res.json(book);
+                }
+              });
            }// end of inner if
         }
 })
+  });
+
+function isLoggedIn(req, res, next) {
+
+    // if user is authenticated in the session, carry on 
+    if (req.isAuthenticated())
+        return next();
+
+    // if they aren't redirect them to the home page
+    res.redirect('/');
+}
 
 module.exports = router;
