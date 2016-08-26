@@ -10,7 +10,7 @@
   <p>ISBN: <%=book.isbn %></p>
   <p>Quantity: <%= book.quantity %></p>
   <form action="/books/<%= book._id%>/borrow" method="put">
-      <input type="hidden" name="_method">
+      <input type="hidden" name="_method" value="PUT">
       <button type="submit">Borrow a book</button>
   </form>
 </body>
