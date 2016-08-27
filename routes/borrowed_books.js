@@ -38,44 +38,7 @@ router.route('/')
               }     
         });
     })
-    //POST a new borrowed_book
-    .post(function(req, res) {
-        // Get values from POST request. These can be done through forms or REST calls. These rely on the "name" attributes for forms
-        var user_id = req.body.user._id;
-        var isbn1 = req.body.book._id;
-        
-        //call the create function for our database
-        mongoose.model('borrowed_book').create({
-            user : user_id,
-            book : book_id
-        }, function (err, borrowed_book) {
-              if (err) {
-                  res.send("There was a problem adding the information to the database.");
-              } else {
-                  //borrowed_book has been created
-                  console.log('POST creating new borrowed_book: ' + borrowed_book);
-                  res.format({
-                      //HTML response will set the location and redirect back to the home page. You could also create a 'success' page if that's your thing
-                    html: function(){
-                        // If it worked, set the header so the address bar doesn't still say /adduser
-                        res.location("borrowed_books");
-                        // And forward to success page
-                        res.redirect("/borrowed_books");
-                    },
-                    //JSON response will show the newly created borrowed_book
-                    json: function(){
-                        res.json(borrowed_book);
-                    }
-                });
-              }
-        })
-    });
-
-
-    /* GET New borrowed_book page. */
-router.get('/new', function(req, res) {
-    res.render('borrowed_books/new', { title: 'Add New borrowed_book' });
-});
+   
 
 
 // route middleware to validate :id
@@ -174,8 +137,8 @@ router.put('/:id/edit', function(req, res) {
             //update it
             borrowed_book.update({
               user_id : user_id,
-            	book_id : book_id
-            	
+              book_id : book_id
+              
             }, function (err, borrowed_bookID) {
               if (err) {
                   res.send("There was a problem updating the information to the database: " + err);
@@ -228,22 +191,6 @@ router.delete('/:id/edit', function (req, res){
     });
 });
 
-/**
-@
-*/
-router.post('/borrowed_books/:id/borrow',  function(req, res){
-    mongoose.model('borrowed_book').findById(req.id, function (err, borrowed_book) {
-        if (err) {
-            return console.error(err);
-        } else {
-           if(borrowed_book.isAvailable === true && borrowed_book.quantity) {
-              borrowed_book.quantity -= 1;
-              // code to update borrowed_borrowed_books table with borrowed_book's and current user's id
-              // update after creating
-              // mongoose.model('borrowed_borrowed_books').create(, function(req,res){})
-           }// end of inner if
-        }
-})
-  })
+
 
 module.exports = router;

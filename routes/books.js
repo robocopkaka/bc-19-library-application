@@ -255,12 +255,17 @@ router.delete('/:id/edit',isAnAdmin, function (req, res){
 /**
 * One of the places I have issues in
 */
-router.put('/books/:id/borrow', isLoggedIn,  function(req, res){
-    mongoose.model('book').findByIdAndUpdate({_id:req.id}, {$inc:{quantity: -1}}, function (err, book) {
+router.put('/:id/borrow', isLoggedIn,  function(req, res){
+    console.log(req.id)
+    mongoose.model('book').findByIdAndUpdate({_id:req.id}, {$inc:{quantity: -1}}, {new:true}, function (err, book) {
       if (err) {
                   res.send("There was a problem updating the information to the database: " + err);
               } 
               else {
+                      mongoose.model('borrowed_books').create({
+                          user_id: req.user.id,
+                          book_id:req.id,
+                      })
                       //HTML responds by going back to the page or you can be fancy and create a new view that shows a success page.
                       res.format({
                           html: function(){
