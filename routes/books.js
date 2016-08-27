@@ -2,7 +2,8 @@ var express = require('express'),
     router = express.Router(),
     mongoose = require('mongoose'), //mongo connection
     bodyParser = require('body-parser'), //parses information from POST
-    methodOverride = require('method-override'); //used to manipulate POST
+    methodOverride = require('method-override'), //used to manipulate POST
+    passport = require('passport'); 
 
 router.use(bodyParser.urlencoded({ extended: true }))
 router.use(methodOverride(function(req, res){
@@ -83,10 +84,8 @@ router.route('/')
     });
 
 
-    /* GET New book page. */
-    // another issue location
-router.get('/new', isAuthenticated, function(req, res) {
-  console.log(req)
+router.get('/new', isAnAdmin, function(req, res) {
+  console.log(req.user)
     res.render('books/new', { title: 'Add New book' });
 });
 
@@ -148,7 +147,7 @@ router.route('/:id')
 });
 
 //GET the individual book by Mongo ID
-router.get('/:id/edit', function(req, res) {
+router.get('/:id/edit',isAnAdmin, function(req, res) {
     //search for the book within Mongo
     mongoose.model('book').findById(req.id, function (err, book) {
         if (err) {
@@ -194,13 +193,13 @@ router.put('/:id/edit', function(req, res) {
             //update it
             book.update({
                 name : name1,
-            	isbn : isbn1,
-            	author : author1,
-            	description: description1,
-            	quantity: quantity1,
-            	surchargeFee: surchargeFee1,
-            	category:category1,
-            	isAvailable : isAvailable1
+              isbn : isbn1,
+              author : author1,
+              description: description1,
+              quantity: quantity1,
+              surchargeFee: surchargeFee1,
+              category:category1,
+              isAvailable : isAvailable1
             }, function (err, bookID) {
               if (err) {
                   res.send("There was a problem updating the information to the database: " + err);
@@ -222,7 +221,7 @@ router.put('/:id/edit', function(req, res) {
 });
 
 //DELETE a book by ID
-router.delete('/:id/edit', function (req, res){
+router.delete('/:id/edit',isAnAdmin, function (req, res){
     //find book by ID
     mongoose.model('book').findById(req.id, function (err, book) {
         if (err) {
@@ -256,7 +255,7 @@ router.delete('/:id/edit', function (req, res){
 /**
 * One of the places I have issues in
 */
-router.put('/books/:id/borrow',  function(req, res){
+router.put('/books/:id/borrow',isLoggedIn,  function(req, res){
     var user_id = req.book._id;
     var book_id = req.book._id;
     var reduce_by_one  = 1;
@@ -284,13 +283,18 @@ router.put('/books/:id/borrow',  function(req, res){
 })
 });
 
-// Another place I have issues in
-var isAuthenticated = function (req, res, next) {
-  if (req.isAuthenticated())
-    return next();
-  res.redirect('/');
-}
-
-
-
 module.exports = router;
+
+function isLoggedIn(req, res, next) {  
+  if (req.isAuthenticated())
+      return next();
+  res.redirect('/login');
+}
+function isAnAdmin(req, res, next){
+  if(req.isAuthenticated()){
+    if(req.user.local.isAdmin === true) return next();
+    else res.redirect('/login')
+  }
+
+  else res.redirect('/login')
+}
