@@ -2,7 +2,8 @@ var express = require('express'),
     router = express.Router(),
     mongoose = require('mongoose'), //mongo connection
     bodyParser = require('body-parser'), //parses information from POST
-    methodOverride = require('method-override'); //used to manipulate POST
+    methodOverride = require('method-override'), //used to manipulate POST
+    passport = require('passport'); 
 
 router.use(bodyParser.urlencoded({ extended: true }))
 router.use(methodOverride(function(req, res){
@@ -83,10 +84,11 @@ router.route('/')
     });
 
 
-    /* GET New book page. */
-router.get('/new', function(req, res) {
+router.get('/new', isAnAdmin, function(req, res) {
+  console.log(req.user)
     res.render('books/new', { title: 'Add New book' });
 });
+
 
 
 // route middleware to validate :id
@@ -145,7 +147,7 @@ router.route('/:id')
 });
 
 //GET the individual book by Mongo ID
-router.get('/:id/edit', function(req, res) {
+router.get('/:id/edit',isAnAdmin, function(req, res) {
     //search for the book within Mongo
     mongoose.model('book').findById(req.id, function (err, book) {
         if (err) {
@@ -191,13 +193,13 @@ router.put('/:id/edit', function(req, res) {
             //update it
             book.update({
                 name : name1,
-            	isbn : isbn1,
-            	author : author1,
-            	description: description1,
-            	quantity: quantity1,
-            	surchargeFee: surchargeFee1,
-            	category:category1,
-            	isAvailable : isAvailable1
+              isbn : isbn1,
+              author : author1,
+              description: description1,
+              quantity: quantity1,
+              surchargeFee: surchargeFee1,
+              category:category1,
+              isAvailable : isAvailable1
             }, function (err, bookID) {
               if (err) {
                   res.send("There was a problem updating the information to the database: " + err);
@@ -219,7 +221,7 @@ router.put('/:id/edit', function(req, res) {
 });
 
 //DELETE a book by ID
-router.delete('/:id/edit', function (req, res){
+router.delete('/:id/edit',isAnAdmin, function (req, res){
     //find book by ID
     mongoose.model('book').findById(req.id, function (err, book) {
         if (err) {
@@ -251,47 +253,40 @@ router.delete('/:id/edit', function (req, res){
 });
 
 /**
-@
+* One of the places I have issues in
 */
-router.post('/books/:id/borrow', isLoggedIn,  function(req, res){
-    var user_id = req.book._id;
-    var book_id = req.book._id;
-    mongoose.model('book').findById(req.id, function (err, book) {
-        if (err) {
-            return console.error(err);
-        } else {
-           if(book.isAvailable === true && book.quantity) {
-              book.quantity -= 1;
-              // code to update borrowed_books table with book's and current user's id
-              // update after creating
-              // mongoose.model('borrowed_books').create(function(req,res){
-              //   user_id: user_id
-              //   book_id: book._id
-              // });
-              res.format({
-                html: function(){
-                res.render('/', {
-                  // "bookdob" : bookdob,
-                  "book" : book
-                });
-              },
-                json: function(){
-                  res.json(book);
-                }
-              });
-           }// end of inner if
-        }
-})
-  });
-
-function isLoggedIn(req, res, next) {
-
-    // if user is authenticated in the session, carry on 
-    if (req.isAuthenticated())
-        return next();
-
-    // if they aren't redirect them to the home page
-    res.redirect('/');
-}
+router.put('/books/:id/borrow', isLoggedIn,  function(req, res){
+    mongoose.model('book').findByIdAndUpdate({_id:req.id}, {$inc:{quantity: -1}}, function (err, book) {
+      if (err) {
+                  res.send("There was a problem updating the information to the database: " + err);
+              } 
+              else {
+                      //HTML responds by going back to the page or you can be fancy and create a new view that shows a success page.
+                      res.format({
+                          html: function(){
+                               res.redirect("/books/" + book._id);
+                         },
+                         //JSON responds showing the updated values
+                        json: function(){
+                               res.json(book);
+                         }
+                      });
+               }
+    })
+});
 
 module.exports = router;
+
+function isLoggedIn(req, res, next) {  
+  if (req.isAuthenticated())
+      return next();
+  res.redirect('/login');
+}
+function isAnAdmin(req, res, next){
+  if(req.isAuthenticated()){
+    if(req.user.local.isAdmin === true) return next();
+    else res.redirect('/login')
+  }
+
+  else res.redirect('/login')
+}

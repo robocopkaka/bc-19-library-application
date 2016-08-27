@@ -4,6 +4,8 @@ module.exports = function(app, passport) {
     // var express = require('express');
     // var app = express();
     // var passport = require('passport');
+    // var router = express.Router();
+
     // =====================================
     // HOME PAGE (with login links) ========
     // =====================================
@@ -191,6 +193,11 @@ module.exports = function(app, passport) {
            res.redirect('/profile');
         });
     });
+
+    app.get('/books/new', isLoggedIn, function(req, res) {
+  console.log(req.session.passport)
+    res.render('books/new', { title: 'Add New book' });
+});
 };
 
 // route middleware to make sure a user is logged in

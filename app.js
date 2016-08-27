@@ -4,8 +4,8 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var passport = require('passport');
 var flash    = require('connect-flash');
+var passport = require('passport');
 var session      = require('express-session');
 var db = require('./models/db.js');
 var book = require('./models/books.js');
@@ -35,19 +35,18 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
+app.use(session({ secret: 'ilovescotchscotchyscotchscotch' })); // session secret
+app.use(flash()); // use connect-flash for flash messages stored in session
+app.use(passport.initialize());
+app.use(passport.session()); // persistent login sessions
 app.use('/', routes);
 app.use('/users', users1);
 app.use('/books', books);
 app.use('/categories', categories);
 
-app.use(session({ secret: 'ilovescotchscotchyscotchscotch' })); // session secret
-app.use(passport.initialize());
-app.use(passport.session()); // persistent login sessions
-app.use(flash()); // use connect-flash for flash messages stored in session
 
 // routes ======================================================================
-require('./routes/routes.js')(app,passport);
+//require('./routes/routes.js')(app,passport);
 require('./config/passport.js')(passport);
 
 
