@@ -255,32 +255,24 @@ router.delete('/:id/edit',isAnAdmin, function (req, res){
 /**
 * One of the places I have issues in
 */
-router.put('/books/:id/borrow',isLoggedIn,  function(req, res){
-    var user_id = req.book._id;
-    var book_id = req.book._id;
-    var reduce_by_one  = 1;
-    mongoose.model('book').findById(req.id, function (err, book) {
-      var book1 = {$inc:{quantity:1}}
-      book.update({
-        quantity: book1
-      })
-        if (err) {
-            return console.error(err);
-        } else {
-              res.format({
-                html: function(){
-                res.render('/book/:id', {
-                  // "bookdob" : bookdob,
-                  "book" : book
-                });
-              },
-                json: function(){
-                  res.json(book);
-                }
-              });
-           }// end of inner if
-        
-})
+router.put('/books/:id/borrow', isLoggedIn,  function(req, res){
+    mongoose.model('book').findByIdAndUpdate({_id:req.id}, {$inc:{quantity: -1}}, function (err, book) {
+      if (err) {
+                  res.send("There was a problem updating the information to the database: " + err);
+              } 
+              else {
+                      //HTML responds by going back to the page or you can be fancy and create a new view that shows a success page.
+                      res.format({
+                          html: function(){
+                               res.redirect("/books/" + book._id);
+                         },
+                         //JSON responds showing the updated values
+                        json: function(){
+                               res.json(book);
+                         }
+                      });
+               }
+    })
 });
 
 module.exports = router;
