@@ -48,8 +48,8 @@ router.route('/')
         var description1 = req.body.description;        
         var quantity1 = req.body.quantity;
         var surchargeFee1 = req.body.surchargeFee;
-        var category1 = req.body.category
-        var isAvailable1 = req.body.isAvailable;
+        var category1 = req.body.category;
+        // var isAvailable1 = req.body.isAvailable;
         //call the create function for our database
         mongoose.model('book').create({
             name : name1,
@@ -59,7 +59,7 @@ router.route('/')
             quantity: quantity1,
             surchargeFee: surchargeFee1,
             category:category1,
-            isAvailable : isAvailable1
+            // isAvailable : isAvailable1
         }, function (err, book) {
               if (err) {
                   res.send("There was a problem adding the information to the database.");
@@ -186,7 +186,7 @@ router.put('/:id/edit', function(req, res) {
         var quantity1 = req.body.quantity;
         var surchargeFee1 = req.body.surchargeFee;
         var category1 = req.body.category
-        var isAvailable1 = req.body.isAvailable;
+        // var isAvailable1 = req.body.isAvailable;
 
    //find the document by ID
         mongoose.model('book').findById(req.id, function (err, book) {
@@ -199,7 +199,7 @@ router.put('/:id/edit', function(req, res) {
               quantity: quantity1,
               surchargeFee: surchargeFee1,
               category:category1,
-              isAvailable : isAvailable1
+              // isAvailable : isAvailable1
             }, function (err, bookID) {
               if (err) {
                   res.send("There was a problem updating the information to the database: " + err);
