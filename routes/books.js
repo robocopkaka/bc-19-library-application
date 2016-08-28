@@ -48,8 +48,8 @@ router.route('/')
         var description1 = req.body.description;        
         var quantity1 = req.body.quantity;
         var surchargeFee1 = req.body.surchargeFee;
-        var category1 = req.body.category
-        var isAvailable1 = req.body.isAvailable;
+        var category1 = req.body.category;
+        // var isAvailable1 = req.body.isAvailable;
         //call the create function for our database
         mongoose.model('book').create({
             name : name1,
@@ -59,7 +59,7 @@ router.route('/')
             quantity: quantity1,
             surchargeFee: surchargeFee1,
             category:category1,
-            isAvailable : isAvailable1
+            // isAvailable : isAvailable1
         }, function (err, book) {
               if (err) {
                   res.send("There was a problem adding the information to the database.");
@@ -186,7 +186,7 @@ router.put('/:id/edit', function(req, res) {
         var quantity1 = req.body.quantity;
         var surchargeFee1 = req.body.surchargeFee;
         var category1 = req.body.category
-        var isAvailable1 = req.body.isAvailable;
+        // var isAvailable1 = req.body.isAvailable;
 
    //find the document by ID
         mongoose.model('book').findById(req.id, function (err, book) {
@@ -199,7 +199,7 @@ router.put('/:id/edit', function(req, res) {
               quantity: quantity1,
               surchargeFee: surchargeFee1,
               category:category1,
-              isAvailable : isAvailable1
+              // isAvailable : isAvailable1
             }, function (err, bookID) {
               if (err) {
                   res.send("There was a problem updating the information to the database: " + err);
@@ -255,25 +255,43 @@ router.delete('/:id/edit',isAnAdmin, function (req, res){
 /**
 * One of the places I have issues in
 */
-router.put('/books/:id/borrow', isLoggedIn,  function(req, res){
-    mongoose.model('book').findByIdAndUpdate({_id:req.id}, {$inc:{quantity: -1}}, function (err, book) {
-      if (err) {
-                  res.send("There was a problem updating the information to the database: " + err);
-              } 
-              else {
-                      //HTML responds by going back to the page or you can be fancy and create a new view that shows a success page.
-                      res.format({
-                          html: function(){
-                               res.redirect("/books/" + book._id);
-                         },
-                         //JSON responds showing the updated values
-                        json: function(){
-                               res.json(book);
-                         }
-                      });
-               }
-    })
-});
+router.put('/:id/borrow', isLoggedIn,  function(req, res){
+  console.log(req.user);
+  mongoose.model('book').findById(req.id,function(err, book){
+    if(err) {console.log(err)}
+    else {
+      mongoose.model('borrowed_books').findOne({'user_id':req.user.id, 'book_id':req.id}, function(err, result){
+        if(result !== null) res.send("You've borrowed this book before");
+        else{
+      
+          if(book.quantity >= 1 && book.isAvailable === true){
+            mongoose.model('book').findByIdAndUpdate({_id:req.id}, {$inc:{quantity: -1}}, {new:true}, function (err, book) {
+            if (err) {res.send("There was a problem updating the information to the database: " + err);}
+                     
+                    else {
+                              mongoose.model('borrowed_books').create({
+                                  user_id: req.user.id,
+                                  book_id:req.id
+                              })
+                            //HTML responds by going back to the page or you can be fancy and create a new view that shows a success page.
+                            res.format({
+                                html: function(){
+                                     res.redirect("/books/" + book._id);
+                               },
+                               //JSON responds showing the updated values
+                              json: function(){
+                                     res.json(book);
+                               }
+                            });
+                     }// end if else block to save to borrowed_books schema and display the results
+            })
+          }// end if else block to check that a book has copies left and is available before a user can borrow it
+          else {res.send("Sorry, you can't borrow this book")}
+        }// end of if else block for checking if a user has borrowed a book before
+      }) // end of mongoose call that checks if a user has borrowed a book before
+    }// end if else block that checks if book was grabbed successfully
+  })// end of first mongoose call to grab the book
+});// end route handler
 
 module.exports = router;
 

@@ -1,23 +1,130 @@
-
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Stuff</title>
-</head>
-<body>
-  
 
-  <form action="/books" method="post">
-    <input type="text" name="name"/>
-    <input type="text" name="isbn"/>
-    <input type="text" name="author"/>
-    <input type="text" name="description">
-    <input type="text" name="quantity"/>
-    <input type="text" name="surchargeFee">
-    <input type="text" name="category"/>
-    <input type="text" name="isAvailable">
-    <button type="submit">Submit</button>
-  </form>
+<head>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title><% title %></title>
+
+  <link rel="stylesheet" href="/stylesheets/demo.css">
+  <link rel="stylesheet" href="/stylesheets/form-validation.css">
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+
+</head>
+
+
+
+    <div class="main-content">
+
+        <!-- You only need this form and the form-validation.css -->
+
+        <form class="form-validation" method="post" action="/books">
+
+            <div class="form-title-row">
+                <h1>Add a New Book</h1>
+            </div>
+
+            <div class="form-row">
+
+                <label>
+                    <span>Name: </span>
+                    <input type="text" name="name">
+                </label>
+
+            </div>
+
+            <div class="form-row">
+
+                <label>
+                    <span>ISBN: </span>
+                    <input type="text" name="isbn">
+                </label>
+
+            </div>
+
+          <div class="form-row">
+
+                <label>
+                    <span>Author: </span>
+                    <input type="text" name="author">
+                </label>
+            </div>
+
+            <div class="form-row">
+
+                <label>
+                    <span>Description: </span>
+                    <input type="textarea" name="description">
+                </label>
+            </div>
+
+            <div class="form-row">
+
+                <label>
+                    <span>Quantity: </span>
+                    <input type="number" name="quantity">
+                </label>
+            </div>
+
+            <div class="form-row">
+
+                <label>
+                    <span>Surcharge Fee: </span>
+                    <input type="number" name="surchargeFee">
+                </label>
+
+            </div>
+
+            <div class="form-row">
+
+                <label>
+                    <span>Category: </span>
+                    <input type="text" name="category">
+                </label>
+
+            </div>
+
+
+            <div class="form-row">
+
+                <button type="submit">Submit Form</button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<script>
+
+    $(document).ready(function() {
+
+        // Here is how to show an error message next to a form field
+
+        var errorField = $('.form-input-name-row');
+
+        // Adding the form-invalid-data class will show
+        // the error message and the red x for that field
+
+        errorField.addClass('form-invalid-data');
+        errorField.find('.form-invalid-data-info').text('Please enter your name');
+
+
+        // Here is how to mark a field with a green check mark
+
+        var successField = $('.form-input-email-row');
+
+        successField.addClass('form-valid-data');
+    });
+
+</script>
 
 </body>
+
 </html>

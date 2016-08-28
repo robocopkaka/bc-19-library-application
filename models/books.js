@@ -7,6 +7,6 @@ var bookSchema = new mongoose.Schema({
   quantity: Number,
   surchargeFee: Number,
   category: String,
-  isAvailable: Boolean
+  isAvailable: {type:Boolean,default:true}
 });
 mongoose.model('book', bookSchema);
