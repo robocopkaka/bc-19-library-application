@@ -1,4 +1,4 @@
-<% include ../head %>
+<% include ../views/head %>
 
 <div class="section">
 	    	<div class="container">
@@ -22,7 +22,7 @@
 							<li><b>Author:</b> <%= book.author %></li>
 							<li><b>Category:</b> </b> <%= book.category %></li>
 							<li><b>Technologies:</b> HTML5, CSS3, jQuery, PHP, MySQL</li>
-							<% if (book.isAvailable === true) { %>
+							<% if (book.isAvailabe === true) { %>
 							  <li>
 								<form action="/books/<%= book._id%>/borrow" method="post"' enctype ="application/x-www-form-urlencoded">
       								<input type="hidden" name="_method" value="PUT">
@@ -38,4 +38,4 @@
 			</div>
 		</div>
 
-<% include ../footer %>
+<% include ../views/footer %>
