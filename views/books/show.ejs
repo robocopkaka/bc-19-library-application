@@ -1,17 +1,41 @@
+<% include ../head %>
 
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Stuff</title>
-</head>
-<body>
-  <p>Name: <%= book.name %></p>
-  <p>Author:<%= book.author %></p>
-  <p>ISBN: <%=book.isbn %></p>
-  <p>Quantity: <%= book.quantity %></p>
-  <form action="/books/<%= book._id%>/borrow" method="post"' enctype ="application/x-www-form-urlencoded">
-      <input type="hidden" name="_method" value="PUT">
-      <button type="submit">Borrow a book</button>
-  </form>
-</body>
-</html>
+<div class="section">
+	    	<div class="container">
+				<div class="row">
+					<!-- Image Column -->
+					<div class="col-sm-6">
+						<div class="portfolio-item">
+							<div class="portfolio-image">
+								<a href="#"><img src="images/portfolio2.jpg" alt="Project Name"></a>
+							</div>
+						</div>
+					</div>
+					<!-- End Image Column -->
+					<!-- Project Info Column -->
+					<div class="portfolio-item-description col-sm-6">
+						<h3><%= book.name %></h3>
+						<p>
+							<%= book.description %>
+						</p>
+						<ul class="no-list-style">
+							<li><b>Author:</b> <%= book.author %></li>
+							<li><b>Category:</b> </b> <%= book.category %></li>
+							<li><b>Technologies:</b> HTML5, CSS3, jQuery, PHP, MySQL</li>
+							<% if (book.isAvailabe === true) { %>
+							  <li>
+								<form action="/books/<%= book._id%>/borrow" method="post"' enctype ="application/x-www-form-urlencoded">
+      								<input type="hidden" name="_method" value="PUT">
+      								<button type="submit" class="portfolio-visit-btn">Borrow a book</button>
+  								</form>
+  							   </li>
+  							   <% } %>
+							<!-- <li class="portfolio-visit-btn"><a href="#" class="btn">Visit Website</a></li> -->
+						</ul>
+					</div>
+					<!-- End Project Info Column -->
+				</div>
+			</div>
+		</div>
+
+<% include ../footer %>

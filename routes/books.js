@@ -134,7 +134,6 @@ router.route('/:id')
         res.format({
           html: function(){
               res.render('books/show', {
-                // "bookdob" : bookdob,
                 "book" : book
               });
           },
