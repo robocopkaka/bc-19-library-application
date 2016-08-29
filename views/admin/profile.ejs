@@ -1,48 +1,122 @@
-<% include ../head %>
-    <div class="section section-breadcrumbs">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-12">
-                        <h1>Borrowed books</h1>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="section">
-            <div class="container">
-                <div class="row">
-                <% books.forEach(function(book) { %>
-                    <div class="col-md-4 col-sm-6">
-                        <div class="portfolio-item">
-                            <div class="portfolio-image">
-                                <a href="page-portfolio-item.html"><img src="images/portfolio1.jpg" alt="Project Name"></a>
-                            </div>
-                            <div class="portfolio-info">
-                                <ul>
-                                    <li class="portfolio-project-name">Book name:<%= book.book.name %></li>
-                                    <li><%= book.book.author %></li>
-                                    <% if (user.local.email !== null) { %>
-                                        <li class="portfolio-project-name">Borrowed by: <%= book.user.local.email%>
-                                    <% } %>
-                                    <% if (user.twitter.id !== null) { %>
-                                        <%= book.user.twitter.username%>
-                                    <% } %>
-                                    <% if (user.google.id !== null) { %>
-                                        <%= book.user.google.name %>
-                                    <% } %>
-                                    <% if (user.facebook.id !== null) { %>
-                                        <%= book.user.facebook.name%>
-                                    <% } %>
-                                    </li>
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Kachi's Library</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
 
-                                    <li class="read-more"><a href="page-portfolio-item.html" class="btn">Read more</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                <% }); %>
+        <link rel="stylesheet" href="/stylesheets/bootstrap.min.css">
+        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+        <link rel="stylesheet" href="/stylesheets/icomoon-social.css">
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,600,800' rel='stylesheet' type='text/css'>
+
+
+        <link rel="stylesheet" href="/stylesheets/leaflet.css" />
+    <!--[if lte IE 8]>
+        <link rel="stylesheet" href="css/leaflet.ie.css" />
+    <![endif]-->
+    <link rel="stylesheet" href="/stylesheets/main.css">
+
+        <script src="/javascripts/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+        
+
+        <!-- Navigation & Logo-->
+        <div class="mainmenu-wrapper">
+          <div class="container">
+            <div class="menuextras">
+          <div class="extras">
+            <ul>
+              <li class="shopping-cart-items"><i class="glyphicon glyphicon-shopping-cart icon-white"></i> <a href="page-shopping-cart.html"><b>3 items</b></a></li>
+              <li>
+                <div class="dropdown choose-country">
+                  <a class="#" data-toggle="dropdown" href="#"><img src="/images/flags/gb.png" alt="Great Britain"> UK</a>
+                  <ul class="dropdown-menu" role="menu">
+                    <li role="menuitem"><a href="#"><img src="/images/flags/us.png" alt="United States"> US</a></li>
+                    <li role="menuitem"><a href="#"><img src="/images/flags/de.png" alt="Germany"> DE</a></li>
+                    <li role="menuitem"><a href="#"><img src="/images/flags/es.png" alt="Spain"> ES</a></li>
+                  </ul>
                 </div>
+              </li>
+                  <li><a href="page-login.html">Login</a></li>
+                </ul>
+          </div>
             </div>
+            <nav id="mainmenu" class="mainmenu">
+          <ul>
+            <li class="logo-wrapper"><a href="index.html"><img src="/images/mPurpose-logo.png" alt="Multipurpose Twitter Bootstrap Template"></a></li>
+            <li>
+              <a href="/">Home</a>
+            </li>
+            <li>
+              <a href="/books">Books</a>
+            </li>
+            <li>
+              <% if(login) { %>
+                <a href="/logout">Logout</a>
+              <% } else{ %>
+                <a href="/login">Login</a>
+              <% } %>
+            </li>
+            <% if(login) {%>
+              <li>
+                <a href="/user_borrowed_books">Borrowed books</a>
+              </li>
+            <% } %>
+          </ul>
+        </nav>
+      </div>
+    </div>
+    <body>
+<div class="col-sm-8 col-sm-offset-2">
+      <div class="text-center">
+        <h1 class=" fa fa-user"> Profile</h1><br>
+        <span><strong>user id</strong>: <%= user._id ? user._id : '' %></span><br>
+        <span class="fa fa-sign-out"><a href="/"> Sign out</a></span>
+        <hr>
+        <div class="jumbotron">
+          <% if (user.local.email != null) { %>
+            <img src="https://avatars.io/gravatar/<%= user.local.email %>/140" class="img-circle"><br>
+            <strong>email</strong>: <%= user.local.email %><br>
+          <% } %>
+
+          <% if (user.facebook.id != null) { %>
+            <h2 class="fa fa-facebook"> Facebook</h2><br>
+            <img src="https://avatars.io/gravatar/<%= user.facebook.email %>/140" class="img-circle"><br>
+            <strong>id</strong>: <%= user.facebook.id %><br>
+            <strong>email</strong>: <%= user.facebook.email %><br>
+            <strong>name</strong>: <%= user.facebook.name %>
+          <% } %>
+
+          <% if (user.twitter.id != null) { %>
+            <h2 class="fa fa-twitter"> Twitter</h2><br>
+            <img src="https://avatars.io/twitter/<%= user.twitter.username %>" class="img-circle"><br>
+            <strong>id</strong>: <%= user.twitter.id %><br>
+            <strong>token</strong>: <%= user.twitter.token %><br>
+            <strong>username</strong>: <%= user.twitter.username %><br>
+            <strong>displayName</strong>: <%= user.twitter.displayName %>
+          <% } %>
+
+          <% if (user.google.id != null) { %>
+            <h2 class="fa fa-google-plus"> Google</h2><br>
+            <img src="https://avatars.io/gravatar/<%= user.google.email %>/140" class="img-circle"><br>
+            <strong>id</strong>: <%= user.google.id %><br>
+            <strong>token</strong>: <%= user.google.token %><br>
+            <strong>email</strong>: <%= user.google.email %><br>
+            <strong>name</strong>: <%= user.google.name %>
+          <% } %>
         </div>
-<% include ../footer %>
+      </div>
+    </div>
+</body>
+</html>
