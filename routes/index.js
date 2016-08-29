@@ -100,47 +100,47 @@ router.get('/auth/google/callback', passport.authenticate('google', {
   failureRedirect: '/',
 }));
 
-router.get('/user_borrowed_books', function(req, res){
-  mongoose.model('borrowed_books').find({'user_id':req.user._id}, function(err, results){
-      console.log(results);
-        if (err) res.send(err);
-      else{
-        res.format({
-              html: function(){
-                        res.render('borrowed_books/index', {
-                              title: 'All borrowed books',
-                              "books" : results
-                          });
-                    },
-                    //JSON response will show all books in JSON format
-                    json: function(){
-                        res.json(infophotos);
-                    }
-            })
-      }// end else
-    })
-})
+// router.get('/user_borrowed_books', function(req, res){
+//   mongoose.model('borrowed_books').find({'user_id':req.user._id}, function(err, results){
+//       console.log(results);
+//         if (err) res.send(err);
+//       else{
+//         res.format({
+//               html: function(){
+//                         res.render('borrowed_books/index', {
+//                               title: 'All borrowed books',
+//                               "books" : results
+//                           });
+//                     },
+//                     //JSON response will show all books in JSON format
+//                     json: function(){
+//                         res.json(infophotos);
+//                     }
+//             })
+//       }// end else
+//     })
+// })
 
-router.get('/borrowed_books', function(req, res){
-  mongoose.model('borrowed_books').find({}, function(err, results){
-      console.log(results);
-        if (err) res.send(err);
-      else{
-        res.format({
-              html: function(){
-                        res.render('admin/borrowed_books', {
-                              title: 'All borrowed books',
-                              "books" : results
-                          });
-                    },
-                    //JSON response will show all books in JSON format
-                    json: function(){
-                        res.json(infophotos);
-                    }
-            })
-      }// end else
-    })
-})
+// router.get('/borrowed_books', function(req, res){
+//   mongoose.model('borrowed_books').find({}, function(err, results){
+//       console.log(results);
+//         if (err) res.send(err);
+//       else{
+//         res.format({
+//               html: function(){
+//                         res.render('admin/borrowed_books', {
+//                               title: 'All borrowed books',
+//                               "books" : results
+//                           });
+//                     },
+//                     //JSON response will show all books in JSON format
+//                     json: function(){
+//                         res.json(infophotos);
+//                     }
+//             })
+//       }// end else
+//     })
+// })
 
 
 module.exports = router;

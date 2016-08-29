@@ -28,7 +28,8 @@ router.route('/')
                     html: function(){
                         res.render('books/index', {
                               title: 'All my books',
-                              "books" : books
+                              "books" : books,
+                              user: req.user
                           });
                     },
                     //JSON response will show all books in JSON format
