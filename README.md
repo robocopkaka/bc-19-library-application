@@ -27,3 +27,16 @@ The app depends on a number of NodeJS modules
 * passport-twitter - used to allow users signup/ login through Twitter
 * passport-google-oauth - used to allow users signup/ login through Google
 * passport-local - used to allow users signup/ login normally
+
+## Front End Dependencies
+Bootstrap - a framework used for developing user interfaces
+
+### Installation
+* Navigate to a directory of choice on terminal.
+* Clone this repository on that directory.
+* Navigate into the directory
+* Install back end dependencies using:
+	'<addr>' npm install
+* Run using
+	'<addr>' npm run dev
+* Go to localhost:/3000 on your browser	
