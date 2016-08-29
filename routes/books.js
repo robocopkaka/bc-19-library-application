@@ -295,7 +295,7 @@ router.put('/:id/borrow', isLoggedIn,  function(req, res){
 
 router.put('/:id/return', isLoggedIn, function(req, res){
 
-  mongoose.model('borrowed_books').findByIdAndUpdate({'book_id':req.id},{$set:{is_returned:false}}, function(err, borrowed_book){
+  mongoose.model('borrowed_books').findOneAndUpdate({'book_id':req.id},{$set:{is_returned:false}}, function(err, borrowed_book){
       if(err) console.log(err);
       else {
                   //book has been returned
@@ -316,10 +316,10 @@ router.put('/:id/return', isLoggedIn, function(req, res){
 
 router.put('/:id/return_and_update', isAnAdmin, function(req, res){
   
-  mongoose.model('borrowed_books').findByIdAndUpdate({'book_id':req.id},{$set:{is_returned:true}}, function(err, borrowed_book){
+  mongoose.model('borrowed_books').findOneAndUpdate({'book_id':req.id},{$set:{is_returned:true}}, function(err, borrowed_book){
       if(err) console.log(err);
       else {
-              mongoose.model('books').findByIdAndUpdate({_id:req.id}, {$inc:{quantity:1}}, function(err, book){
+              mongoose.model('books').findOneAndUpdate({_id:req.id}, {$inc:{quantity:1}}, function(err, book){
                 if (err) console.log(err);
               })// end of second mongoose call
               //book has been returned

@@ -1,6 +1,7 @@
 var express = require('express');  
 var passport = require('passport');  
 var router = express.Router();
+var mongoose = require('mongoose');
 
 router.get('/', function(req, res, next) {  
   res.render('index', { title: 'Express' });
@@ -58,8 +59,29 @@ router.get('/auth/google/callback', passport.authenticate('google', {
   failureRedirect: '/',
 }));
 
-    /* GET New book page. */
-    // another issue location
+router.get('/user_borrowed_books', function(req, res){
+  mongoose.model('borrowed_books').find({'user_id': req.user._id}, function(err, results){
+    console.log(req.user);
+    var user_ids = results.map(function(el) {return el.book_id})
+    mongoose.model('book').find({'_id': {"$in":user_ids}}, function(err, books){
+      if (err) res.send(err);
+      else{
+        res.format({
+              html: function(){
+                        res.render('profile.ejs', {
+                              title: 'All borrowed books',
+                              "books" : books
+                          });
+                    },
+                    //JSON response will show all books in JSON format
+                    json: function(){
+                        res.json(infophotos);
+                    }
+            })
+      }// end else
+    })
+  })
+})
 
 module.exports = router;
 
