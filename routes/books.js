@@ -28,7 +28,8 @@ router.route('/')
                     html: function(){
                         res.render('books/index', {
                               title: 'All my books',
-                              "books" : books
+                              "books" : books,
+                              user: req.user
                           });
                     },
                     //JSON response will show all books in JSON format
@@ -134,7 +135,6 @@ router.route('/:id')
         res.format({
           html: function(){
               res.render('books/show', {
-                // "bookdob" : bookdob,
                 "book" : book
               });
           },
@@ -271,7 +271,8 @@ router.put('/:id/borrow', isLoggedIn,  function(req, res){
                     else {
                               mongoose.model('borrowed_books').create({
                                   user_id: req.user.id,
-                                  book_id:req.id
+                                  book_id:req.id,
+                                  is_returned:false
                               })
                             //HTML responds by going back to the page or you can be fancy and create a new view that shows a success page.
                             res.format({
@@ -292,6 +293,53 @@ router.put('/:id/borrow', isLoggedIn,  function(req, res){
     }// end if else block that checks if book was grabbed successfully
   })// end of first mongoose call to grab the book
 });// end route handler
+
+router.put('/:id/return', isLoggedIn, function(req, res){
+
+  mongoose.model('borrowed_books').findOneAndUpdate({'book_id':req.id},{$set:{is_returned:false}}, function(err, borrowed_book){
+      if(err) console.log(err);
+      else {
+                  //book has been returned
+                  res.format({
+                      //HTML response will set the location and redirect back to the home page. You could also create a 'success' page if that's your thing
+                    html: function(){
+                        // If it worked, set the header so the address bar doesn't still say /adduser
+                        res.redirect('back');
+                    },
+                    //JSON response will show the newly created book
+                    json: function(){
+                        res.json(borrowed_book);
+                    }
+                });
+              }
+  })// end mongoose call
+})
+
+router.put('/:id/return_and_update', isAnAdmin, function(req, res){
+  
+  mongoose.model('borrowed_books').findOneAndUpdate({'book_id':req.id},{$set:{is_returned:true}}, function(err, borrowed_book){
+      if(err) console.log(err);
+      else {
+              mongoose.model('books').findOneAndUpdate({_id:req.id}, {$inc:{quantity:1}}, function(err, book){
+                if (err) console.log(err);
+              })// end of second mongoose call
+              //book has been returned
+              res.format({
+                  //HTML response will set the location and redirect back to the home page. You could also create a 'success' page if that's your thing
+                html: function(){
+                    // If it worked, set the header so the address bar doesn't still say /adduser
+                    res.redirect('back');
+                    res.flash("Book returned successfully")
+                },
+                //JSON response will show the newly created book
+                json: function(){
+                    res.json(borrowed_book);
+                }
+            });
+          }
+  })// end mongoose call
+
+})
 
 module.exports = router;
 

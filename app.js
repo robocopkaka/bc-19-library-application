@@ -28,6 +28,8 @@ dotenv.load();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+
+
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
@@ -39,6 +41,11 @@ app.use(session({ secret: 'ilovescotchscotchyscotchscotch' })); // session secre
 app.use(flash()); // use connect-flash for flash messages stored in session
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
+
+app.use(function (req, res, next) {
+    res.locals.login = req.isAuthenticated();
+    next();
+});
 app.use('/', routes);
 app.use('/users', users1);
 app.use('/books', books);
