@@ -3,7 +3,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-12">
-                        <h1>Books you've borrowed</h1>
+                        <h1>Borrowed books</h1>
                     </div>
                 </div>
             </div>
@@ -20,10 +20,23 @@
                             </div>
                             <div class="portfolio-info">
                                 <ul>
-                                    <li class="portfolio-project-name">Book name:<%= book.book.name %></li>
+                                    <li class="portfolio-project-name">Book name:<%= book.book['name'] %></li>
                                     <li><%= book.book.author %></li>
-                                        <li class="portfolio-project-name">Return Date: <%= book.return_date %>
+                                    <li class="portfolio-project-name">Borrowed by: 
+                                    <% if (user.local.email !== null) { %>
+                                        <%= book.user.local.email%>
+                                    <% } %>
+                                    <% if (user.twitter.id !== null) { %>
+                                        <%= book.user.twitter.username%>
+                                    <% } %>
+                                    <% if (user.google.id !== null) { %>
+                                        <%= book.user.google.name %>
+                                    <% } %>
+                                    <% if (user.facebook.id !== null) { %>
+                                        <%= book.user.facebook.name%>
+                                    <% } %>
                                     </li>
+                                    <li>Return date:<%= book.return_date %></li>
 
                                     <li class="read-more"><a href="page-portfolio-item.html" class="btn">Read more</a></li>
                                 </ul>

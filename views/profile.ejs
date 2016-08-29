@@ -1,37 +1,42 @@
 <% include ../views/head %>
-    <div class="section section-breadcrumbs">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-12">
-                        <h1>Books you've borrowed</h1>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="section">
-            <div class="container">
-                <div class="row">
-                <% books.forEach(function(book) { %>
-                    <div class="col-md-4 col-sm-6">
-                        <div class="portfolio-item">
-                            <div class="portfolio-image">
-                                <a href="page-portfolio-item.html"><img src="images/portfolio1.jpg" alt="Project Name"></a>
-                            </div>
-                            <div class="portfolio-info">
-                                <ul>
-                                    <li class="portfolio-project-name">Book name:<%= book.book.name %></li>
-                                    <li><%= book.book.author %></li>
-                                        <li class="portfolio-project-name">Return Date: <%= book.return_date  %>
-                                    </li>
+<div class="col-sm-8 col-sm-offset-2">
+      <div class="text-center">
+        <h1 class=" fa fa-user"> Profile</h1><br>
+        <span><strong>user id</strong>: <%= user._id ? user._id : '' %></span><br>
+        <span class="fa fa-sign-out"><a href="/"> Sign out</a></span>
+        <hr>
+        <div class="jumbotron">
+          <% if (user.local.email != null) { %>
+            <img src="https://avatars.io/gravatar/<%= user.local.email %>/140" class="img-circle"><br>
+            <strong>email</strong>: <%= user.local.email %><br>
+          <% } %>
 
-                                    <li class="read-more"><a href="page-portfolio-item.html" class="btn">Read more</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                <% }); %>
-                </div>
-            </div>
+          <% if (user.facebook.id != null) { %>
+            <h2 class="fa fa-facebook"> Facebook</h2><br>
+            <img src="https://avatars.io/gravatar/<%= user.facebook.email %>/140" class="img-circle"><br>
+            <strong>id</strong>: <%= user.facebook.id %><br>
+            <strong>email</strong>: <%= user.facebook.email %><br>
+            <strong>name</strong>: <%= user.facebook.name %>
+          <% } %>
+
+          <% if (user.twitter.id != null) { %>
+            <h2 class="fa fa-twitter"> Twitter</h2><br>
+            <img src="https://avatars.io/twitter/<%= user.twitter.username %>" class="img-circle"><br>
+            <strong>id</strong>: <%= user.twitter.id %><br>
+            <strong>token</strong>: <%= user.twitter.token %><br>
+            <strong>username</strong>: <%= user.twitter.username %><br>
+            <strong>displayName</strong>: <%= user.twitter.displayName %>
+          <% } %>
+
+          <% if (user.google.id != null) { %>
+            <h2 class="fa fa-google-plus"> Google</h2><br>
+            <img src="https://avatars.io/gravatar/<%= user.google.email %>/140" class="img-circle"><br>
+            <strong>id</strong>: <%= user.google.id %><br>
+            <strong>token</strong>: <%= user.google.token %><br>
+            <strong>email</strong>: <%= user.google.email %><br>
+            <strong>name</strong>: <%= user.google.name %>
+          <% } %>
         </div>
+      </div>
+    </div>
 <% include ../views/footer %>
