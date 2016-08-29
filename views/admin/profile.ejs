@@ -1,9 +1,9 @@
-<% include ../views/head %>
+<% include ../head %>
     <div class="section section-breadcrumbs">
             <div class="container">
                 <div class="row">
                     <div class="col-md-12">
-                        <h1>Books you've borrowed</h1>
+                        <h1>Borrowed books</h1>
                     </div>
                 </div>
             </div>
@@ -22,7 +22,18 @@
                                 <ul>
                                     <li class="portfolio-project-name">Book name:<%= book.book.name %></li>
                                     <li><%= book.book.author %></li>
-                                        <li class="portfolio-project-name">Return Date: <%= book.return_date  %>
+                                    <% if (user.local.email !== null) { %>
+                                        <li class="portfolio-project-name">Borrowed by: <%= book.user.local.email%>
+                                    <% } %>
+                                    <% if (user.twitter.id !== null) { %>
+                                        <%= book.user.twitter.username%>
+                                    <% } %>
+                                    <% if (user.google.id !== null) { %>
+                                        <%= book.user.google.name %>
+                                    <% } %>
+                                    <% if (user.facebook.id !== null) { %>
+                                        <%= book.user.facebook.name%>
+                                    <% } %>
                                     </li>
 
                                     <li class="read-more"><a href="page-portfolio-item.html" class="btn">Read more</a></li>
@@ -34,4 +45,4 @@
                 </div>
             </div>
         </div>
-<% include ../views/footer %>
+<% include ../footer %>
