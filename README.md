@@ -36,7 +36,7 @@ Bootstrap - a framework used for developing user interfaces
 * Clone this repository on that directory.
 * Navigate into the directory
 * Install back end dependencies using:
-	> npm install
+> npm install
 * Run using
-	> npm run dev
+> npm run dev
 * Go to localhost:/3000 on your browser	
