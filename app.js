@@ -46,6 +46,8 @@ app.use(function (req, res, next) {
     res.locals.login = req.isAuthenticated();
     next();
 });
+
+
 app.use('/', routes);
 app.use('/users', users1);
 app.use('/books', books);

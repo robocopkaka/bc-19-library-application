@@ -164,7 +164,8 @@ router.get('/:id/edit',isAnAdmin, function(req, res) {
                        res.render('books/edit', {
                           title: 'book' + book._id,
                         // "bookdob" : bookdob,
-                          "book" : book
+                          "book" : book,
+                          user: req.user
                       });
                  },
                  //JSON response will return the JSON output
@@ -252,9 +253,7 @@ router.delete('/:id/edit',isAnAdmin, function (req, res){
     });
 });
 
-/**
-* One of the places I have issues in
-*/
+
 router.put('/:id/borrow', isLoggedIn,  function(req, res){
   console.log(req.user);
   mongoose.model('book').findById(req.id,function(err, book){
@@ -272,6 +271,8 @@ router.put('/:id/borrow', isLoggedIn,  function(req, res){
                               mongoose.model('borrowed_books').create({
                                   user_id: req.user.id,
                                   book_id:req.id,
+                                  user:req.user,
+                                  book:book,
                                   is_returned:false
                               })
                             //HTML responds by going back to the page or you can be fancy and create a new view that shows a success page.

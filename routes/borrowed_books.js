@@ -17,26 +17,26 @@ router.route('/')
     //GET all borrowed_books
     .get(function(req, res, next) {
         //retrieve all borrowed_books from Monogo
-        mongoose.model('borrowed_book').find({}, function (err, borrowed_books) {
-              if (err) {
-                  return console.error(err);
-              } else {
-                  //respond to both HTML and JSON. JSON responses require 'Accept: application/json;' in the Request Header
-                  res.format({
-                      //HTML response will render the index.jade file in the views/borrowed_books folder. We are also setting "borrowed_books" to be an accessible variable in our jade view
-                    html: function(){
-                        res.render('borrowed_books/index', {
-                              title: 'All my borrowed_books',
-                              "borrowed_books" : borrowed_books
-                          });
-                    },
-                    //JSON response will show all borrowed_books in JSON format
-                    json: function(){
-                        res.json(infophotos);
-                    }
-                });
-              }     
-        });
+        // mongoose.model('borrowed_book').find({}, function (err, borrowed_books) {
+        //       if (err) {
+        //           return console.error(err);
+        //       } else {
+        //           //respond to both HTML and JSON. JSON responses require 'Accept: application/json;' in the Request Header
+        //           res.format({
+        //               //HTML response will render the index.jade file in the views/borrowed_books folder. We are also setting "borrowed_books" to be an accessible variable in our jade view
+        //             html: function(){
+        //                 res.render('borrowed_books/index', {
+        //                       title: 'All my borrowed_books',
+        //                       "borrowed_books" : borrowed_books
+        //                   });
+        //             },
+        //             //JSON response will show all borrowed_books in JSON format
+        //             json: function(){
+        //                 res.json(infophotos);
+        //             }
+        //         });
+        //       }     
+        // });
     })
    
 

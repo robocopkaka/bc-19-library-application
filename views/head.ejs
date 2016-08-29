@@ -11,9 +11,10 @@
         <meta name="viewport" content="width=device-width">
 
         <link rel="stylesheet" href="/stylesheets/bootstrap.min.css">
+        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
         <link rel="stylesheet" href="/stylesheets/icomoon-social.css">
         <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,600,800' rel='stylesheet' type='text/css'>
-
         <link rel="stylesheet" href="/stylesheets/leaflet.css" />
     <!--[if lte IE 8]>
         <link rel="stylesheet" href="css/leaflet.ie.css" />
@@ -52,8 +53,8 @@
             <nav id="mainmenu" class="mainmenu">
           <ul>
             <li class="logo-wrapper"><a href="index.html"><img src="/images/mPurpose-logo.png" alt="Multipurpose Twitter Bootstrap Template"></a></li>
-            <li class="active">
-              <a href="index.html">Home</a>
+            <li>
+              <a href="/">Home</a>
             </li>
             <li>
               <a href="/books">Books</a>
@@ -65,7 +66,13 @@
                 <a href="/login">Login</a>
               <% } %>
             </li>
+            <% if(login) {%>
+              <li>
+                <a href="/user_borrowed_books">Borrowed books</a>
+              </li>
+            <% } %>
           </ul>
         </nav>
       </div>
     </div>
+    <body>
