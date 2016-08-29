@@ -1,0 +1,50 @@
+<% include ../head %>
+<!-- Page Title -->
+    <div class="section section-breadcrumbs">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <h1>Books</h1>
+          </div>
+        </div>
+      </div>
+    </div>
+        
+        <!-- Posts List -->
+        <div class="section blog-posts-wrapper">
+        <div class="container">
+        <div class="row">
+          <!-- Post -->
+        <% books.forEach(function(book) { %>
+          <div class="col-md-4 col-sm-6">
+            <div class="blog-post">
+              <!-- Post Info -->
+              <!-- End Post Info -->
+              <!-- Post Image -->
+              <a href="page-blog-post-right-sidebar.html"><img src="images/blog1.jpg" class="post-image" alt="Post Title"></a>
+              <!-- End Post Image -->
+              <!-- Post Title & Summary -->
+              <div class="post-title">
+                <h3><a href="page-blog-post-right-sidebar.html"><%= book.name %></a></h3>
+              </div>
+              <div class="post-summary">
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse mattis, nulla id pretium malesuada, dui est laoreet risus, ac rhoncus eros diam id odio. Duis elementum ligula eu ipsum condimentum accumsan.</p>
+              </div>
+              <!-- End Post Title & Summary -->
+              <div class="post-more">
+                <a href="/books/<%= book._id %>" class="btn btn-small">Read more</a>
+              </div>
+            </div>
+          </div>
+        <% }); %> 
+          <!-- End Post -->
+         
+          
+          
+          
+        </div>
+      </div>
+      </div>
+      <!-- End Posts List -->
+
+<% include ../footer %>

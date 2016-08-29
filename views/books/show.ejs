@@ -1,0 +1,54 @@
+<% include ../head %>
+
+ <!-- Page Title -->
+		<div class="section section-breadcrumbs">
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-12">
+						<h1><%= book.name %></h1>
+					</div>
+				</div>
+			</div>
+		</div>
+
+<div class="section">
+	    	<div class="container">
+				<div class="row">
+					<!-- Image Column -->
+					<div class="col-sm-6">
+						<div class="portfolio-item">
+							<div class="portfolio-image">
+								<a href="#"><img src="/images/portfolio2.jpg" alt="Project Name"></a>
+							</div>
+						</div>
+					</div>
+					<!-- End Image Column -->
+					<!-- Project Info Column -->
+					<div class="portfolio-item-description col-sm-6">
+						<h3>Description</h3>
+						<p>
+							<%= book.description %>
+						</p>
+						<ul class="no-list-style">
+							<li><b>Author:</b> <%= book.author %></li>
+							<li><b>Category:</b> </b> <%= book.category %></li>
+							<li><b>Quantity Left:</b><%= book.quantity %> </li>
+							<% if (book.isAvailable === true && book.quantity >= 1) { %>
+							  <li>
+								<form action="/books/<%= book._id%>/borrow" method="post"' enctype ="application/x-www-form-urlencoded">
+      								<input type="hidden" name="_method" value="PUT">
+      								<button type="submit" class="portfolio-visit-btn">Borrow a book</button>
+  								</form>
+  							   </li>
+  							   <% } else { %>
+	  							   <p>You can't borrow this book</p>
+	  							<% } %>
+							<!-- <li class="portfolio-visit-btn"><a href="#" class="btn">Visit Website</a></li> -->
+						</ul>
+					</div>
+					<!-- End Project Info Column -->
+				</div>
+			</div>
+		</div>
+
+<% include ../footer %>

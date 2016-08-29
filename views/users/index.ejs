@@ -1,0 +1,16 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Stuff</title>
+</head>
+<body>
+  <ul>
+    <% users.forEach(function(user) { %>
+        <li><%= user.twitter.name %> - <%= user.twitter.email %></li>
+    <% }); %>
+  </ul>
+
+
+</body>
+</html>

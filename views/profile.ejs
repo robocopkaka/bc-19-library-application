@@ -1,0 +1,37 @@
+<% include ../views/head %>
+    <div class="section section-breadcrumbs">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h1>Books you've borrowed</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="container">
+                <div class="row">
+                <% books.forEach(function(book) { %>
+                    <div class="col-md-4 col-sm-6">
+                        <div class="portfolio-item">
+                            <div class="portfolio-image">
+                                <a href="page-portfolio-item.html"><img src="images/portfolio1.jpg" alt="Project Name"></a>
+                            </div>
+                            <div class="portfolio-info">
+                                <ul>
+                                    <li class="portfolio-project-name">Book name:<%= book.book.name %></li>
+                                    <li><%= book.book.author %></li>
+                                        <li class="portfolio-project-name">Return Date: <%= book.return_date  %>
+                                    </li>
+
+                                    <li class="read-more"><a href="page-portfolio-item.html" class="btn">Read more</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                <% }); %>
+                </div>
+            </div>
+        </div>
+<% include ../views/footer %>
